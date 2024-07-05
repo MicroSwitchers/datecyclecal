@@ -12,6 +12,7 @@
             --background-color: #ecf0f1;
             --text-color: #34495e;
             --highlight-color: #e74c3c;
+            --instance-colors: #1abc9c, #2ecc71, #e74c3c, #f1c40f, #e67e22, #9b59b6, #34495e, #95a5a6, #d35400, #7f8c8d, #27ae60, #2980b9, #c0392b, #8e44ad, #2c3e50, #16a085, #f39c12, #d35400, #c0392b, #bdc3c7, #7f8c8d, #2c3e50, #8e44ad, #2ecc71, #1abc9c;
         }
         body {
             font-family: 'Arial', sans-serif;
@@ -71,7 +72,6 @@
             padding-right: 25px;
         }
         button {
-            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -80,7 +80,31 @@
             transition: background-color 0.3s;
         }
         button:hover {
+            opacity: 0.8;
+        }
+        .plus-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 15px;
+        }
+        .plus-button:hover {
             background-color: var(--secondary-color);
+        }
+        .instance {
+            border: 2px solid var(--primary-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            position: relative;
+        }
+        .instance h3 {
+            margin-top: 0;
+            color: var(--primary-color);
         }
         #date-list {
             max-height: 300px;
@@ -106,7 +130,6 @@
             background-color: white;
         }
         .calendar-day.highlight {
-            background-color: var(--highlight-color);
             color: white;
             font-weight: bold;
         }
@@ -128,6 +151,11 @@
             flex: 1;
         }
         #todayButton {
+            background-color: var(--secondary-color);
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .today-button {
             background-color: var(--secondary-color);
             margin-bottom: 15px;
             width: 100%;
@@ -164,46 +192,46 @@
         <div class="columns">
             <div class="left-column">
                 <h2>Input</h2>
-                <button id="todayButton" onclick="setToday()">Today</button>
-                <div class="date-inputs">
-                    <select id="yearSelect">
-                        <option value="">Year</option>
-                    </select>
-                    <input list="months" id="monthInput" placeholder="MMM or # (Month)" onchange="validateMonthInput()">
-                    <input type="text" id="dayInput" placeholder="DD (Day)" maxlength="2" onchange="validateDayInput()">
+                <div id="instances">
+                    <div class="instance" id="instance-0">
+                        <h3>Instance 1</h3>
+                        <button class="today-button" onclick="setToday(0)">Today</button>
+                        <div class="date-inputs">
+                            <select class="yearSelect">
+                                <option value="">Year</option>
+                            </select>
+                            <input list="months" class="monthInput" placeholder="MMM or # (Month)" onchange="validateMonthInput(this)">
+                            <input type="text" class="dayInput" placeholder="DD (Day)" maxlength="2" onchange="validateDayInput(this)">
+                        </div>
+                        <datalist id="months">
+                            <option value="Jan - (01)">
+                            <option value="Feb - (02)">
+                            <option value="Mar - (03)">
+                            <option value="Apr - (04)">
+                            <option value="May - (05)">
+                            <option value="Jun - (06)">
+                            <option value="Jul - (07)">
+                            <option value="Aug - (08)">
+                            <option value="Sep - (09)">
+                            <option value="Oct - (10)">
+                            <option value="Nov - (11)">
+                            <option value="Dec - (12)">
+                        </datalist>
+                        <label for="increment">Increment:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" class="increment" min="1" required style="flex: 1;">
+                            <select class="increment-type" style="width: auto;">
+                                <option value="days">Days</option>
+                                <option value="weeks">Weeks</option>
+                                <option value="months">Months</option>
+                            </select>
+                        </div>
+                        <label for="num-occurrences">Number of Occurrences:</label>
+                        <input type="number" class="num-occurrences" min="1" value="10" required>
+                        <button class="calculate-button" onclick="calculateDates(0)">Calculate</button>
+                    </div>
                 </div>
-                <datalist id="months">
-                    <option value="Jan - (01)">
-                    <option value="Feb - (02)">
-                    <option value="Mar - (03)">
-                    <option value="Apr - (04)">
-                    <option value="May - (05)">
-                    <option value="Jun - (06)">
-                    <option value="Jul - (07)">
-                    <option value="Aug - (08)">
-                    <option value="Sep - (09)">
-                    <option value="Oct - (10)">
-                    <option value="Nov - (11)">
-                    <option value="Dec - (12)">
-                </datalist>
-                
-                <label for="increment">Increment:</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="number" id="increment" min="1" required style="flex: 1;">
-                    <select id="increment-type" style="width: auto;">
-                        <option value="days">Days</option>
-                        <option value="weeks">Weeks</option>
-                        <option value="months">Months</option>
-                    </select>
-                </div>
-                
-                <label for="num-occurrences">Number of Occurrences:</label>
-                <input type="number" id="num-occurrences" min="1" value="100" required>
-                
-                <button onclick="calculateDates()">Calculate</button>
-                
-                <h2>Date List</h2>
-                <ul id="date-list"></ul>
+                <button class="plus-button" onclick="addInstance()">+</button>
             </div>
             <div class="right-column">
                 <h2>Calendar</h2>
@@ -215,57 +243,59 @@
                 <div id="calendar"></div>
             </div>
         </div>
+        <div class="columns">
+            <div class="left-column">
+                <h2>Date List</h2>
+                <ul id="date-list"></ul>
+            </div>
+        </div>
     </div>
 
     <script>
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        let dates = [];
+        const instanceColors = getComputedStyle(document.documentElement).getPropertyValue('--instance-colors').split(', ');
+        let instances = [{ dates: [], color: instanceColors[0] }];
         let currentDate = moment();
 
-        function populateYearSelect() {
+        function populateYearSelect(selectElement) {
             const currentYear = new Date().getFullYear();
-            const yearSelect = document.getElementById('yearSelect');
             for (let i = 0; i < 100; i++) {
                 const year = currentYear - i;
                 const option = document.createElement('option');
                 option.value = year;
                 option.textContent = year;
-                yearSelect.appendChild(option);
+                selectElement.appendChild(option);
             }
         }
 
-        document.getElementById('yearSelect').addEventListener('change', function() {
-            document.getElementById('monthInput').focus();
-        });
-
-        function setToday() {
+        function setToday(instanceIndex) {
             const today = moment();
-            document.getElementById('yearSelect').value = today.year();
-            document.getElementById('monthInput').value = `${monthNames[today.month()]} - (${(today.month() + 1).toString().padStart(2, '0')})`;
-            document.getElementById('dayInput').value = today.date().toString().padStart(2, '0');
+            document.querySelector(`#instance-${instanceIndex} .yearSelect`).value = today.year();
+            document.querySelector(`#instance-${instanceIndex} .monthInput`).value = `${monthNames[today.month()]} - (${(today.month() + 1).toString().padStart(2, '0')})`;
+            document.querySelector(`#instance-${instanceIndex} .dayInput`).value = today.date().toString().padStart(2, '0');
         }
 
-        function validateMonthInput() {
-            let input = document.getElementById('monthInput').value.toLowerCase();
+        function validateMonthInput(inputElement) {
+            let input = inputElement.value.toLowerCase();
             let monthNumber = input.match(/^(\d{1,2})/);
             if (monthNumber) {
                 let monthIndex = parseInt(monthNumber[1], 10) - 1;
                 if (monthIndex >= 0 && monthIndex < 12) {
-                    document.getElementById('monthInput').value = `${monthNames[monthIndex]} - (${(monthIndex + 1).toString().padStart(2, '0')})`;
+                    inputElement.value = `${monthNames[monthIndex]} - (${(monthIndex + 1).toString().padStart(2, '0')})`;
                 }
             } else {
                 let monthName = getMonthName(input.slice(0, 3));
                 if (monthName) {
-                    document.getElementById('monthInput').value = `${monthName} - (${getMonthNumber(monthName)})`;
+                    inputElement.value = `${monthName} - (${getMonthNumber(monthName)})`;
                 }
             }
-            document.getElementById('dayInput').focus();
+            inputElement.nextElementSibling.focus();
         }
 
-        function validateDayInput() {
-            let input = document.getElementById('dayInput').value;
+        function validateDayInput(inputElement) {
+            let input = inputElement.value;
             if (input.length === 1) {
-                document.getElementById('dayInput').value = '0' + input;
+                inputElement.value = '0' + input;
             }
         }
 
@@ -280,11 +310,12 @@
             return (index + 1).toString().padStart(2, '0');
         }
 
-        function calculateDates() {
-            const year = document.getElementById('yearSelect').value;
-            const monthInput = document.getElementById('monthInput').value.match(/\((\d{2})\)/)[1];
+        function calculateDates(instanceIndex) {
+            const instance = instances[instanceIndex];
+            const year = document.querySelector(`#instance-${instanceIndex} .yearSelect`).value;
+            const monthInput = document.querySelector(`#instance-${instanceIndex} .monthInput`).value.match(/\((\d{2})\)/)[1];
             const month = parseInt(monthInput, 10) - 1;
-            const day = document.getElementById('dayInput').value;
+            const day = document.querySelector(`#instance-${instanceIndex} .dayInput`).value;
             const startDate = moment([year, month, day]);
 
             if (!startDate.isValid()) {
@@ -292,16 +323,16 @@
                 return;
             }
 
-            const increment = parseInt(document.getElementById('increment').value);
-            const incrementType = document.getElementById('increment-type').value;
-            const numOccurrences = parseInt(document.getElementById('num-occurrences').value);
+            const increment = parseInt(document.querySelector(`#instance-${instanceIndex} .increment`).value);
+            const incrementType = document.querySelector(`#instance-${instanceIndex} .increment-type`).value;
+            const numOccurrences = parseInt(document.querySelector(`#instance-${instanceIndex} .num-occurrences`).value);
 
-            dates = [startDate.format('YYYY-MM-DD')];
+            instance.dates = [startDate.format('YYYY-MM-DD')];
             let nextDate = startDate.clone();
 
             for (let i = 1; i < numOccurrences; i++) {
                 nextDate = nextDate.clone().add(increment, incrementType);
-                dates.push(nextDate.format('YYYY-MM-DD'));
+                instance.dates.push(nextDate.format('YYYY-MM-DD'));
             }
 
             displayDates();
@@ -312,10 +343,13 @@
         function displayDates() {
             const dateList = document.getElementById('date-list');
             dateList.innerHTML = '';
-            dates.forEach(date => {
-                const li = document.createElement('li');
-                li.textContent = moment(date).format('MMMM D, YYYY');
-                dateList.appendChild(li);
+            instances.forEach((instance, index) => {
+                instance.dates.forEach(date => {
+                    const li = document.createElement('li');
+                    li.textContent = `${moment(date).format('MMMM D, YYYY')} (Instance ${index + 1})`;
+                    li.style.color = instance.color;
+                    dateList.appendChild(li);
+                });
             });
         }
 
@@ -344,9 +378,22 @@
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayElement = createCalendarDay(i);
                 const currentDateString = currentDate.clone().date(i).format('YYYY-MM-DD');
-                if (dates.includes(currentDateString)) {
+
+                const instanceColors = instances
+                    .filter(instance => instance.dates.includes(currentDateString))
+                    .map(instance => instance.color);
+
+                if (instanceColors.length > 0) {
                     dayElement.classList.add('highlight');
+                    if (instanceColors.length === 1) {
+                        dayElement.style.backgroundColor = instanceColors[0];
+                    } else {
+                        const colorStops = instanceColors.map((color, index) => `${color} ${(index * (100 / instanceColors.length)).toFixed(2)}% ${(index + 1) * (100 / instanceColors.length).toFixed(2)}%`).join(', ');
+                        const gradient = `linear-gradient(45deg, ${colorStops})`;
+                        dayElement.style.backgroundImage = gradient;
+                    }
                 }
+
                 calendarElement.appendChild(dayElement);
             }
         }
@@ -363,8 +410,65 @@
             updateCalendar();
         }
 
-        populateYearSelect();
+        function addInstance() {
+            const instanceIndex = instances.length;
+            if (instanceIndex >= 25) {
+                alert('Maximum of 25 instances reached');
+                return;
+            }
+
+            const instanceColor = instanceColors[instanceIndex];
+            instances.push({ dates: [], color: instanceColor });
+
+            const instanceContainer = document.getElementById('instances');
+            const newInstance = document.createElement('div');
+            newInstance.className = 'instance';
+            newInstance.id = `instance-${instanceIndex}`;
+            newInstance.innerHTML = `
+                <h3>Instance ${instanceIndex + 1}</h3>
+                <button class="today-button" onclick="setToday(${instanceIndex})">Today</button>
+                <div class="date-inputs">
+                    <select class="yearSelect">
+                        <option value="">Year</option>
+                    </select>
+                    <input list="months" class="monthInput" placeholder="MMM or # (Month)" onchange="validateMonthInput(this)">
+                    <input type="text" class="dayInput" placeholder="DD (Day)" maxlength="2" onchange="validateDayInput(this)">
+                </div>
+                <label for="increment">Increment:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" class="increment" min="1" required style="flex: 1;">
+                    <select class="increment-type" style="width: auto;">
+                        <option value="days">Days</option>
+                        <option value="weeks">Weeks</option>
+                        <option value="months">Months</option>
+                    </select>
+                </div>
+                <label for="num-occurrences">Number of Occurrences:</label>
+                <input type="number" class="num-occurrences" min="1" value="10" required>
+                <button class="calculate-button" onclick="calculateDates(${instanceIndex})">Calculate</button>
+            `;
+            newInstance.style.borderColor = instanceColor;
+            newInstance.querySelector('h3').style.color = instanceColor;
+            newInstance.querySelector('.today-button').style.backgroundColor = instanceColor;
+            newInstance.querySelector('.calculate-button').style.backgroundColor = instanceColor;
+
+            instanceContainer.appendChild(newInstance);
+            populateYearSelect(newInstance.querySelector('.yearSelect'));
+        }
+
+        function initializeFirstInstance() {
+            const instance = document.querySelector('#instance-0');
+            const instanceColor = instanceColors[0];
+            instance.style.borderColor = instanceColor;
+            instance.querySelector('h3').style.color = instanceColor;
+            instance.querySelector('.today-button').style.backgroundColor = instanceColor;
+            instance.querySelector('.calculate-button').style.backgroundColor = instanceColor;
+        }
+
+        populateYearSelect(document.querySelector('.yearSelect'));
+        setToday(0);
         updateCalendar();
+        initializeFirstInstance();
     </script>
 </body>
 </html>
