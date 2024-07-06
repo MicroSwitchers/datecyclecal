@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurring Date Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> 
+</head>
+<body>
+    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <div class="container">
+        <h1>Recurring Date Calculator</h1>
+        <div class="columns">
+            <div class="left-column">
+                <h2>Input</h2>
+                <div id="instances">
+                </div>
+                <button class="plus-button" onclick="addInstance()">+</button>
+                <h2>Exclusion Settings</h2>
+                <div> 
+                    <label for="excludeDays">Exclude Days:</label>
+                    <div id="excludeDays"> 
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="0"> Sun
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="1"> Mon
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="2"> Tue
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="3"> Wed
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="4"> Thu
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="5"> Fri
+                        </label>
+                        <label>
+                            <input type="checkbox" class="excludeDay" value="6"> Sat
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="adjustPreference">If excluded, show appointment on:</label>
+                    <select id="adjustPreference">
+                        <option value="before">First available day before</option>
+                        <option value="after">First available day after</option>
+                    </select>
+                </div>
+            </div>
+            <div class="right-column">
+                <h2>Calendar</h2>
+                <div class="calendar-controls">
+                    <button class="vibrant-button" onclick="changeMonth(-1)">Previous Month</button>
+                    <span id="current-month"></span>
+                    <button class="vibrant-button" onclick="changeMonth(1)">Next Month</button>
+                </div>
+                <div id="calendar"></div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="left-column">
+                <h2>Date List</h2>
+                <ul id="date-list"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script> 
+</body>
+</html>

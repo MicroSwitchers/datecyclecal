@@ -1,0 +1,252 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+    --highlight-color: #e74c3c;
+    --instance-colors: #e6194b, #34a443, #4363d8, #dcc424, #7b3092, #2ca3a3, #510b4d, #90af32, #046666, #9c5e16, #6f0d2e, #528b0c, #14662d, #808000, #725940, #234750, #16688f, #2c7f75, #713d55, #264653;
+}
+body.dark-mode {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --background-color: #1a2226;
+    --text-color: #ecf0f1;
+    --highlight-color: #e74c3c;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+h2 {
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+.columns {
+    display: flex;
+    gap: 40px;
+}
+.left-column, .right-column {
+    flex: 1;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 5px;
+    padding-right: 25px;
+}
+button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    opacity: 0.8;
+}
+.plus-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 15px;
+}
+.plus-button:hover {
+    background-color: var(--secondary-color);
+}
+.instance {
+    border: 2px solid var(--primary-color);
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    position: relative;
+}
+.instance h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+#date-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: var(--background-color);
+}
+.date-group {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--background-color);
+}
+.date-group ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.instance-label {
+    border-radius: 8px;
+    padding: 5px 10px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: white;
+}
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+}
+.calendar-day {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+.calendar-day.highlight {
+    color: white;
+    font-weight: bold;
+}
+.calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+#current-month {
+    font-weight: bold;
+}
+.date-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.date-inputs > * {
+    flex: 1;
+}
+#todayButton {
+    background-color: var(--secondary-color);
+    margin-bottom: 15px;
+    width: 100%;
+}
+.today-button {
+    margin-bottom: 15px;
+    width: 100%;
+}
+#yearSelect {
+    overflow-y: auto;
+}
+.vibrant-button {
+    background-color: var(--primary-color);
+}
+@media (max-width: 768px) {
+    .columns {
+        flex-direction: column;
+    }
+    .calendar-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .calendar-controls button {
+        width: 100%;
+    }
+    #calendar {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    .calendar-day {
+        padding: 5px;
+        font-size: 0.8rem;
+    }
+}
+.toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.toggle-button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Day Exclusion Styling */
+#excludeDays { 
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns for 7 days */
+    gap: 5px;
+    margin-bottom: 15px; 
+}
+
+#excludeDays label { 
+    display: flex;
+    align-items: center; /* Vertically center checkbox and label */
+    justify-content: center; /* Horizontally center checkbox and label */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    font-weight: normal; /* Use normal font weight for the labels */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    cursor: pointer; /* Make the entire label clickable */
+}
+
+#excludeDays input[type="checkbox"] {
+    margin-right: 5px; /* Add some space between checkbox and label */
+}
+
+/* Optional: Highlight selected days */
+#excludeDays input[type="checkbox"]:checked + label { 
+    background-color: var(--primary-color);
+    color: white;
+} 
