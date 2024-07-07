@@ -273,7 +273,7 @@
             }
         }
         .toggle-button {
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
             cursor: pointer;
@@ -292,7 +292,6 @@
 </head>
 <body>
     <div class="container">
-        <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
         <h1>Recurring Date Calculator</h1>
         <div class="columns">
             <div class="left-column">
@@ -386,7 +385,7 @@
             </div>
         </div>
     </div>
-
+    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <script>
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const instanceColors = getComputedStyle(document.documentElement).getPropertyValue('--instance-colors').split(', ');
