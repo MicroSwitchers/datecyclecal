@@ -16,8 +16,8 @@
             --triangle-indicator: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
         }
         body.dark-mode {
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
+            --primary-color: #5dade2;
+            --secondary-color: #85c1e9;
             --background-color: #1a2226;
             --text-color: #ecf0f1;
             --highlight-color: #e74c3c;
@@ -30,25 +30,35 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             background-color: var(--background-color);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             padding: 20px;
+            position: relative;
         }
         h1 {
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
         }
+        body.dark-mode h1 {
+            color: var(--secondary-color);
+        }
         h2 {
             color: var(--secondary-color);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 10px;
             margin-top: 0;
+        }
+        body.dark-mode h2 {
+            color: var(--primary-color);
         }
         .columns {
             display: flex;
@@ -255,18 +265,25 @@
             h2 {
                 font-size: 1.2rem;
             }
+            .toggle-button {
+                padding: 5px 10px;
+                font-size: 0.9rem;
+                top: 5px;
+                right: 5px;
+            }
         }
         .toggle-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 4px;
             transition: background-color 0.3s;
+            z-index: 1;
         }
         .toggle-button:hover {
             background-color: var(--secondary-color);
@@ -274,8 +291,8 @@
     </style>
 </head>
 <body>
-    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <div class="container">
+        <button class="toggle-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
         <h1>Recurring Date Calculator</h1>
         <div class="columns">
             <div class="left-column">
