@@ -1,14 +1,23 @@
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const instanceColors = getComputedStyle(document.documentElement).getPropertyValue('--instance-colors').split(', ');
+
+// Get and shuffle instance colors to ensure variety
+const instanceColors = shuffleArray(getComputedStyle(document.documentElement).getPropertyValue('--instance-colors').split(', '));
+
 let instances = [{ dates: [], color: instanceColors[0], name: 'Instance 1' }];
 let currentDate = moment();
-let excludedDays = [];
-let adjustPreference = 'before';
 
-document.getElementById('adjustPreference').addEventListener('change', function () {
-    //  Removed this line, as the apply all button now handles this
-    // recalculateAllInstances();
+window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
 });
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 function populateYearSelect(selectElement) {
     const currentYear = new Date().getFullYear();
@@ -88,34 +97,13 @@ function calculateDates(instanceIndex) {
         instance.dates.push(nextDate.format('YYYY-MM-DD'));
     }
 
-    // Apply exclusion rules AFTER converting to Moment.js objects
-    instance.dates = instance.dates
-        .map(date => moment(date))      // Convert to Moment.js objects
-        .map(date => adjustDateForExclusion(date)) // Adjust for exclusions
-        .map(date => date.format('YYYY-MM-DD')); // Convert back to strings
-
-
     displayDates();
     currentDate = startDate.clone();
     updateCalendar();
 }
 
-function isExcluded(date) {
-    if (excludedDays.includes(date.day().toString())) {
-        return true;
-    }
-    return false;
-}
-
-function adjustDateForExclusion(date) {
-    while (isExcluded(date)) {
-        if (adjustPreference === 'before') {
-            date.subtract(1, 'day');
-        } else {
-            date.add(1, 'day');
-        }
-    }
-    return date;
+function calculateAllDates() {
+    instances.forEach((_, index) => calculateDates(index));
 }
 
 function displayDates() {
@@ -178,17 +166,37 @@ function updateCalendar() {
 
         const instanceColors = instances
             .filter(instance => instance.dates.includes(currentDateString))
-            .map(instance => instance.color);
+            .map(instance => ({ name: instance.name, color: instance.color }));
 
         if (instanceColors.length > 0) {
             dayElement.classList.add('highlight');
             if (instanceColors.length === 1) {
-                dayElement.style.backgroundColor = instanceColors[0];
+                dayElement.style.backgroundColor = instanceColors[0].color;
             } else {
-                const colorStops = instanceColors.map((color, index) => `${color} ${(index * (100 / instanceColors.length)).toFixed(2)}% ${(index + 1) * (100 / instanceColors.length).toFixed(2)}%`).join(', ');
+                const colorStops = instanceColors.map((instance, index) => `${instance.color} ${(index * (100 / instanceColors.length)).toFixed(2)}% ${(index + 1) * (100 / instanceColors.length).toFixed(2)}%`).join(', ');
                 const gradient = `linear-gradient(45deg, ${colorStops})`;
                 dayElement.style.backgroundImage = gradient;
             }
+
+            const infoCard = document.createElement('div');
+            infoCard.className = 'info-card';
+            infoCard.innerHTML = `<div class="info-card-header">${moment(currentDateString).format('MMMM D, YYYY')}</div>`;
+            
+            const ul = document.createElement('ul');
+            instanceColors.forEach(instance => {
+                const li = document.createElement('li');
+                li.className = 'instance-label';
+                li.style.backgroundColor = instance.color;
+                li.textContent = instance.name;
+                ul.appendChild(li);
+            });
+            infoCard.appendChild(ul);
+
+            dayElement.appendChild(infoCard);
+
+            dayElement.addEventListener('click', () => {
+                infoCard.style.display = 'block';
+            });
         }
 
         calendarElement.appendChild(dayElement);
@@ -209,8 +217,8 @@ function changeMonth(delta) {
 
 function addInstance() {
     const instanceIndex = instances.length;
-    if (instanceIndex >= 20) {
-        alert('Maximum of 20 instances reached');
+    if (instanceIndex >= 30) {  // Limit the number of instances to 30
+        alert('Maximum of 30 instances reached');
         return;
     }
 
@@ -234,7 +242,7 @@ function addInstance() {
         <label for="increment">Increment:</label>
         <div style="display: flex; gap: 10px;">
             <select class="increment" required style="flex: 1;">
-                ${Array.from({ length: 30 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                ${Array.from({length: 30}, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
             </select>
             <select class="increment-type" style="width: auto;">
                 <option value="days">Days</option>
@@ -272,30 +280,7 @@ function initializeFirstInstance() {
     instance.querySelector('.num-occurrences').value = 50;
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-}
-
-function recalculateAllInstances() {
-    instances.forEach((instance, index) => {
-        calculateDates(index);
-    });
-}
-
-document.querySelectorAll('.excludeDay').forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-        if (this.checked) {
-            excludedDays.push(this.value);
-        } else {
-            excludedDays = excludedDays.filter(day => day !== this.value);
-        }
-        // This line is removed to allow for an apply all button.
-        // recalculateAllInstances();
-    });
-});
-
 populateYearSelect(document.querySelector('.yearSelect'));
 setToday(0);
 updateCalendar();
 initializeFirstInstance();
-addInstance();
